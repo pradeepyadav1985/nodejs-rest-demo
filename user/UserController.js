@@ -1,10 +1,14 @@
-var express = require('express');
-var router = express.Router();
-var bodyParser = require('body-parser');
+// const express = require('express');
+import express from 'express'
+// const bodyParser = require('body-parser');
+import bodyParser from 'body-parser';
+// const User = require('./User');
+import User from './User.js'
+
+const router = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
-var User = require('./User');
 
 // CREATES A NEW USER
 router.post('/', function (req, res) {
@@ -15,7 +19,7 @@ router.post('/', function (req, res) {
         }, 
         function (err, user) {
             if (err) return res.status(500).send("There was a problem adding the information to the database.");
-            res.status(200).send(user);
+            res.status(201).send(user);
         });
 });
 
@@ -36,14 +40,6 @@ router.get('/:id', function (req, res) {
     });
 });
 
-// DELETES A USER FROM THE DATABASE
-router.delete('/:id', function (req, res) {
-    User.findByIdAndRemove(req.params.id, function (err, user) {
-        if (err) return res.status(500).send("There was a problem deleting the user.");
-        res.status(200).send("User: "+ user.name +" was deleted.");
-    });
-});
-
 // UPDATES A SINGLE USER IN THE DATABASE
 router.put('/:id', function (req, res) {
     User.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, user) {
@@ -52,5 +48,13 @@ router.put('/:id', function (req, res) {
     });
 });
 
+// DELETES A USER FROM THE DATABASE
+router.delete('/:id', function (req, res) {
+    User.findByIdAndRemove(req.params.id, function (err, user) {
+        if (err) return res.status(500).send("There was a problem deleting the user.");
+        res.status(200).send("User: "+ user.name +" was deleted.");
+    });
+});
 
-module.exports = router;
+// module.exports = router;
+export default router
